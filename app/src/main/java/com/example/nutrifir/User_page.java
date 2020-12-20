@@ -44,7 +44,7 @@ public class User_page extends AppCompatActivity {
         Settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),RegisterUser.class));
+                startActivity(new Intent(getApplicationContext(),UserSetting.class));
             }
         });
         userID = fAuth.getCurrentUser().getUid();

@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Nutrifir">
-        <activity android:name=".ReportW"></activity>
+        <activity android:name=".UserSetting"></activity>
+        <activity android:name=".ReportW" />
         <activity android:name=".User_page" />
         <activity android:name=".Workout_Main" />
         <activity android:name=".Workout_List" />

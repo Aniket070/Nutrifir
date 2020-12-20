@@ -31,11 +31,13 @@ public class MainActivity extends AppCompatActivity {
     private double MagnitudePrevious = 0;
     private Integer stepCount = 0;
     private ProgressBar progress;
-    private Integer DistanceTraveled=1;
+    private Integer DistanceTraveled;
+    private Integer DistanceTraveled1;
     private Integer CaloriesBurnt = 1;
     private Integer x=0;
 
-    //public Integer Weight,Height;
+
+    public Integer Weight,Height;
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
         ImageButton Button_User = (ImageButton)findViewById(R.id.Button_User);
+
         Button_User.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException e) {
                 String weight = value.getString("Weight");
                 String height = value.getString("Height");
-                Integer Weight = Integer.parseInt(weight);
                 Integer Height = Integer.parseInt(height);
             }
         });
@@ -96,18 +98,22 @@ public class MainActivity extends AppCompatActivity {
 
                     double MagnitudeDelta = Magnitude - MagnitudePrevious;
                     MagnitudePrevious = Magnitude;
-
                     if(MagnitudeDelta > 6 ){
                         stepCount++;   //TODO send it in
                     }
                     Steps.setText(stepCount.toString());
                     progress.setProgress(stepCount);
-                    DistanceTraveled = (71*stepCount)/100;
-                    //DistanceTraveled = (Height*43*stepCount)/100;
+                    //DistanceTraveled = (71*stepCount)/100;
+                    DistanceTraveled = (56*stepCount)/100;
+                    //DistanceTraveled = DistanceTraveled1 * Height;
+                    //DistanceTraveled = (DistanceTraveled1 * 163)/100;
                     Distance.setText(DistanceTraveled.toString());
                     x=stepCount;
-                    CaloriesBurnt= (35*stepCount)/100;
+                    //distance * 0.000621371 * weight * 2.20462 * 0.653
+                    //CaloriesBurnt= DistanceTraveled* 0.000621371*2.20462 * 0.653*65;
+                    CaloriesBurnt = (DistanceTraveled*58)/100;
                     Calories.setText(CaloriesBurnt.toString());
+
                 }
             }
 
@@ -116,7 +122,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+
         sensorManager.registerListener(stepDetector,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+
+
         Button_workout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     public void logout(View view){
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(),LoginActivity.class));

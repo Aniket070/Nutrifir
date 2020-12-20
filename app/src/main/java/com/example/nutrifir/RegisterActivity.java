@@ -23,12 +23,27 @@ import android.os.Bundle;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
 
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userID;
+    public boolean isValidPassword(final String password) {
+
+        Pattern pattern;
+        Matcher matcher;
+
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
+
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+
+        return matcher.matches();
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,14 +92,13 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 if(TextUtils.isEmpty(username)){
                     RegisterUsername.setError("Username is empty");
+                    return;
                 }
-
-                //firebase part
-
-                fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        //we check if the process of registration is complete or not
+                if(isValidPassword(password)){
+                    fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            //we check if the process of registration is complete or not
                             if(task.isSuccessful()){
                                 Toast.makeText(RegisterActivity.this,"User is created",Toast.LENGTH_SHORT).show();
                                 userID = fAuth.getCurrentUser().getUid();
@@ -102,8 +116,15 @@ public class RegisterActivity extends AppCompatActivity {
                             else{
                                 Toast.makeText(RegisterActivity.this,"Error!" + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
                             }
-                    }
-                });
+                        }
+                    });
+                }else{
+                    RegisterPassword.setError("Add special characters to password");
+                    return;
+                }
+                //firebase part
+
+
             }
         });
     }

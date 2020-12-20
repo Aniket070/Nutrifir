@@ -3,6 +3,7 @@ package com.example.nutrifir;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
@@ -19,19 +20,23 @@ public class Workout_Main extends AppCompatActivity {
     public String c;
     public String timework;
     public String xxxx;
+    private Button Stop;
+    private TextView GetReport;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout__main);
         TextView Workout_dec = (TextView)findViewById(R.id.Workout_dec);
         TextView Workout_cal = (TextView)findViewById(R.id.Workout_cal);
-        TextView GetReport = (TextView)findViewById(R.id.GetReport);
+        Button btnStart = (Button)findViewById(R.id.btnStart);
+        GetReport = (TextView)findViewById(R.id.GetReport);
+        Stop = (Button)findViewById(R.id.button2);
+        GetReport.setVisibility(View.INVISIBLE);
         chronometer = findViewById(R.id.Chronometer);
         chronometer.setFormat("Time: %s");
         chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometer) {
-
             }
         });
 
@@ -121,6 +126,7 @@ public class Workout_Main extends AppCompatActivity {
     }
     public void resetChronometer(View v){
         chronometer.setBase(SystemClock.elapsedRealtime());
+        GetReport.setVisibility(View.VISIBLE);
         pauseOffset=0;
 
     }
